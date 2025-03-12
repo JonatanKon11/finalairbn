@@ -4,8 +4,6 @@ import React from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
-navigator
-
 const ProfilesScreen = () => {
 
   const navigation = useNavigation();

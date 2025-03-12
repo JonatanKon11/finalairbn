@@ -1,7 +1,8 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const baseURL = 'http://localhost:8080';
+//const baseURL = 'http://localhost:8080';
+const baseURL = 'http://192.168.100.6:8080';
 
 const umbnbApi = axios.create({
     baseURL

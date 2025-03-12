@@ -1,37 +1,25 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, Pressable, KeyboardAvoidingView } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { TextInput } from 'react-native-gesture-handler'
-import { useNavigation } from '@react-navigation/native';
-import { auth } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, Pressable,SafeAreaView } from 'react-native'
+import React, { useContext } from 'react'
+import { useForm } from '../hook/useForm'
+import { AuthContext } from '../context/AuthContext';
+import { ScrollView } from 'react-native-gesture-handler';
+import { StatusBar } from 'expo-status-bar';
+import {AuthProvider} from '../context/AuthProvider';
 
-const LoginScreen = () => {
-  const[email,setEmail] = useState("");
-  const[password,setPassword] = useState("");
-  const navigation = useNavigation();
-
-  const login = () => {
-    signInWithEmailAndPassword(auth,email,password).then((userCredential) => {
-      console.log("user credential", userCredential);
-      const user = userCredential.user;
-      console.log("user details", user);
+export default function LogineScreen( { navigation }) {
+    const { email, password, onInputChange } = useForm({
+        email: '',
+        password: ''
     })
-  }
+ 
+  const { login } = useContext(AuthContext)
 
-  useEffect(() => {
-    try {
-      const unsubscribe = auth.onAuthStateChanged((authUser) =>{ 
-        if (authUser) {
-          navigation.replace("Main");
-        }
-      });
-      return unsubscribe;
-    } catch (e) {
-      console.log(e);
+    const onLogin = async () => {
+     login({ email, password })
+        navigation.navigate("Main")
     }
-    },[]);
 
-  return (
+ return (
     <SafeAreaView
        style={{
         flex:1,
@@ -66,9 +54,11 @@ const LoginScreen = () => {
 
         <TextInput
         value={email}
-        onChangeText={(text) => setEmail(text)}
+        onChangeText={(value) => onInputChange(value, 'email')}
+        //onChangeText={(text) => setEmail(text)}
         placeholder='enter your email id'
         placeholderTextColor={"black"}
+        onSubmitEditing={ onLogin}
         style={{
               fontSize:email ? 18 : 18,
             borderBottomColor:"gray",
@@ -86,10 +76,12 @@ const LoginScreen = () => {
 
         <TextInput
         value={password}
-        onChangeText={(text) => setPassword(text)}
+        onChangeText={(value) => onInputChange(value, 'password')}
+        //onChangeText={(text) => setPassword(text)}
         secureTextEntry={true}
            placeholder='Password'
            placeholderTextColor={"black"}
+           onSubmitEditing={ onLogin}
            style={{
                 fontSize:password ? 18 : 18,
                borderBottomColor:"gray",
@@ -101,7 +93,7 @@ const LoginScreen = () => {
       </View>
 
       <Pressable
-      onPress={login}
+      onPress={onLogin}
       style={{
         width:200,
         backgroundColor:"#003580",
@@ -135,8 +127,9 @@ const LoginScreen = () => {
     </KeyboardAvoidingView>
     </SafeAreaView>
   );
-};
+}
 
-export default LoginScreen;
+
+
 
 const styles = StyleSheet.create({})

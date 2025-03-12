@@ -95,7 +95,7 @@ const DestinationsScreen = () => {
          
         >
             <Feather 
-            onPress={() => navigation.navigate("Search")}
+            onPress={() => navigator.navigate("Search")}
             name="arrow-left" size={24} color="black" 
             />
             
